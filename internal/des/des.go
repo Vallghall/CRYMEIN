@@ -1,7 +1,6 @@
 package des
 
 import (
-	"bytes"
 	"encoding/binary"
 	"fmt"
 )
@@ -29,24 +28,41 @@ var ExtensionBlock = [48]byte{
 }
 
 func Encrypt(textBytes, keyBytes []byte) []byte {
-	buffer := new(bytes.Buffer)
-	key := binary.BigEndian.Uint64(textBytes)
-	fmt.Printf("Биты исходного текста    : %08b\n", key)
-	pk := permuteBlock(key, ReplacementPositions[:], 64)
+
+	text := binary.BigEndian.Uint64(textBytes)
+	fmt.Printf("Биты исходного текста    : %08b\n", text)
+
+	key := binary.BigEndian.Uint64(keyBytes)
+	fmt.Printf("Биты заданного ключа     : %08b\n", key)
+
+	fkey := shortenKey(keyBytes)
+	fmt.Printf("Биты fаданного ключа     : %08b\n", fkey)
+
+	pk := permuteBlock(text, ReplacementPositions[:], 64)
 	fmt.Printf("Биты перемешанного текста: %08b\n", pk)
-	binary.Write(buffer, binary.BigEndian, pk)
+
 	L0, R0 := uint32(pk>>32), uint32(pk)
 	fmt.Printf("Биты левой части : %08b\n", L0)
 	fmt.Printf("Биты правой части: %08b\n", R0)
+
 	expR := permuteBlock(uint64(R0), ExtensionBlock[:], 32)
 	fmt.Printf("Расширенный R: %08b\n", expR)
-	return buffer.Bytes()
+
+	return nil
 }
 
 func permuteBlock(src uint64, permutation []uint8, size uint8) (block uint64) {
 	for position, n := range permutation {
 		bit := (src >> (size - n)) & 1
 		block |= bit << uint((len(permutation)-1)-position)
+	}
+	return
+}
+
+func shortenKey(key []byte) (shortKey uint64) {
+	for position, n := range key {
+		shortBlock := uint64(n) >> 1
+		shortKey |= shortBlock << uint(7*(7-position))
 	}
 	return
 }
