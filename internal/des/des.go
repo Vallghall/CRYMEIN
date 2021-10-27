@@ -4,6 +4,8 @@ import (
 	"bytes"
 	"encoding/binary"
 	"fmt"
+	"github.com/Vallghall/CRYMEIN/internal/stable"
+	"strings"
 )
 
 var replacementPositions = [64]byte{
@@ -59,6 +61,13 @@ func Encrypt(textBytes, keyBytes []byte) []byte {
 	whitener := expR ^ roundKey
 	fmt.Printf("Результат XOR: %b\n", whitener)
 
+	s := fmt.Sprintf("%b", whitener)
+	for len(s) != 48 {
+		s = "0" + s
+	}
+	s = sBoxing(s)
+	fmt.Printf("Результат S-боксинга: %s\n", s)
+
 	return nil
 }
 
@@ -76,4 +85,23 @@ func shortenKey(key []byte, size int) (shortKey uint64) {
 		shortKey |= shortBlock << uint(size*(7-position))
 	}
 	return
+}
+
+func sBoxing(xored string) string {
+	builder := strings.Builder{}
+	sb := stable.NewSBox()
+
+	builder.WriteString(sb.GetS1Value(xored[:6]))
+	builder.WriteString(sb.GetS2Value(xored[6:12]))
+
+	builder.WriteString(sb.GetS3Value(xored[12:18]))
+	builder.WriteString(sb.GetS4Value(xored[18:24]))
+
+	builder.WriteString(sb.GetS5Value(xored[24:30]))
+	builder.WriteString(sb.GetS6Value(xored[30:36]))
+
+	builder.WriteString(sb.GetS7Value(xored[36:42]))
+	builder.WriteString(sb.GetS8Value(xored[42:48]))
+
+	return builder.String()
 }
