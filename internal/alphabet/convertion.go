@@ -22,7 +22,7 @@ func rusToRSCII(word string) []byte {
 	return bb.Bytes()
 }
 
-func rSCIIToRus(word string) string {
+func rsciiToRus(word string) string {
 	sb := strings.Builder{}
 	for _, sym := range strings.Split(word, " ") {
 		letter, _ := strconv.ParseInt(sym, 2, 32)

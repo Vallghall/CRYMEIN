@@ -6,7 +6,7 @@ import (
 	"fmt"
 )
 
-var ReplacementPositions = [64]byte{
+var replacementPositions = [64]byte{
 	58, 50, 42, 34, 26, 18, 10, 2,
 	60, 52, 44, 36, 28, 20, 12, 4,
 	62, 54, 46, 38, 30, 22, 14, 6,
@@ -17,7 +17,7 @@ var ReplacementPositions = [64]byte{
 	63, 55, 47, 39, 31, 23, 15, 7,
 }
 
-var ExtensionBlock = [48]byte{
+var extensionBlock = [48]byte{
 	32, 1, 2, 3, 4, 5,
 	4, 5, 6, 7, 8, 9,
 	8, 9, 10, 11, 12, 13,
@@ -32,29 +32,32 @@ func Encrypt(textBytes, keyBytes []byte) []byte {
 	buf := new(bytes.Buffer)
 
 	text := binary.BigEndian.Uint64(textBytes)
-	fmt.Printf("Биты исходного текста    : %08b\n", text)
+	fmt.Printf("Биты исходного текста    : %b\n", text)
 
 	key := binary.BigEndian.Uint64(keyBytes)
-	fmt.Printf("Биты заданного ключа     : %08b\n", key)
+	fmt.Printf("Биты заданного ключа     : %b\n", key)
 
 	factKey := shortenKey(keyBytes, 7)
-	fmt.Printf("Биты фактич. ключа шифра : %08b\n", factKey)
+	fmt.Printf("Биты фактич. ключа шифра : %b\n", factKey)
 
 	binary.Write(buf, binary.BigEndian, factKey)
 	factKeyBytes := buf.Bytes()
 	factKeyBytes = append(factKeyBytes, factKeyBytes[1:]...)
 	roundKey := shortenKey(keyBytes, 6) >> 1
-	fmt.Printf("Биты ключа раунда        : %08b\n", roundKey)
+	fmt.Printf("Биты ключа раунда        : %b\n", roundKey)
 
-	pk := permuteBlock(text, ReplacementPositions[:], 64)
-	fmt.Printf("Биты перемешанного текста: %08b\n", pk)
+	pk := permuteBlock(text, replacementPositions[:], 64)
+	fmt.Printf("Биты перемешанного текста: %b\n", pk)
 
 	L0, R0 := uint32(pk>>32), uint32(pk)
-	fmt.Printf("Биты левой части : %08b\n", L0)
-	fmt.Printf("Биты правой части: %08b\n", R0)
+	fmt.Printf("Биты левой части : %b\n", L0)
+	fmt.Printf("Биты правой части: %b\n", R0)
 
-	expR := permuteBlock(uint64(R0), ExtensionBlock[:], 32)
-	fmt.Printf("Расширенный R: %08b\n", expR)
+	expR := permuteBlock(uint64(R0), extensionBlock[:], 32)
+	fmt.Printf("Расширенный R: %b\n", expR)
+
+	whitener := expR ^ roundKey
+	fmt.Printf("Результат XOR: %b\n", whitener)
 
 	return nil
 }
@@ -74,12 +77,3 @@ func shortenKey(key []byte, size int) (shortKey uint64) {
 	}
 	return
 }
-
-/*
-func toByteSlice56(n uint64) []byte {
-	res := make([]byte,7,7)
-	for i := 0; i < 7; i++ {
-		temp := binary.
-	}
-}
-*/
