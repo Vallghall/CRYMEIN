@@ -92,11 +92,10 @@ func Encrypt(textBytes, keyBytes []byte) []byte {
 	fmt.Printf("Перестановка результата S-боксинга: %b\n", newR0)
 
 	R1 := uint32(newR0) ^ L0
-	preFinal := fmt.Sprintf("%b", R0) + fmt.Sprintf("%b", R1)
-	fmt.Printf("Результат конкатенации L1 и R1: %s\n", preFinal)
+	preFinal := (uint64(R0) << 32) | uint64(R1)
+	fmt.Printf("Результат конкатенации L1 и R1: %b\n", preFinal)
 
-	finalSrc, _ := strconv.ParseInt(preFinal, 2, 64)
-	final := permuteBlock(uint64(finalSrc), finalReplacementPositions[:], 64)
+	final := permuteBlock(preFinal, finalReplacementPositions[:], 64)
 	buf.Reset()
 	binary.Write(buf, binary.BigEndian, final)
 
