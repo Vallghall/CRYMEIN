@@ -5,6 +5,7 @@ import (
 	"encoding/binary"
 	"fmt"
 	"github.com/Vallghall/CRYMEIN/internal/stable"
+	"strconv"
 	"strings"
 )
 
@@ -28,6 +29,24 @@ var extensionBlock = [48]byte{
 	20, 21, 22, 23, 24, 25,
 	24, 25, 26, 27, 28, 29,
 	28, 29, 30, 31, 32, 1,
+}
+
+var replacement32Positions = [32]byte{
+	16, 7, 20, 21, 29, 12, 28, 17,
+	1, 15, 23, 26, 5, 18, 31, 10,
+	2, 8, 24, 14, 32, 27, 3, 9,
+	19, 13, 30, 6, 22, 11, 4, 25,
+}
+
+var finalReplacementPositions = [64]byte{
+	40, 8, 48, 16, 56, 24, 64, 32,
+	39, 7, 47, 15, 55, 23, 63, 31,
+	38, 6, 46, 14, 54, 22, 62, 30,
+	37, 5, 45, 13, 53, 21, 61, 29,
+	36, 4, 44, 12, 52, 20, 60, 28,
+	35, 3, 43, 11, 51, 19, 59, 27,
+	34, 2, 42, 10, 50, 18, 58, 26,
+	33, 1, 41, 9, 49, 17, 57, 25,
 }
 
 func Encrypt(textBytes, keyBytes []byte) []byte {
@@ -68,7 +87,20 @@ func Encrypt(textBytes, keyBytes []byte) []byte {
 	s = sBoxing(s)
 	fmt.Printf("Результат S-боксинга: %s\n", s)
 
-	return nil
+	sInt64, _ := strconv.ParseInt(s, 2, 64)
+	newR0 := permuteBlock(uint64(sInt64), replacement32Positions[:], 32)
+	fmt.Printf("Перестановка результата S-боксинга: %b\n", newR0)
+
+	R1 := uint32(newR0) ^ L0
+	preFinal := fmt.Sprintf("%b", R0) + fmt.Sprintf("%b", R1)
+	fmt.Printf("Результат конкатенации L1 и R1: %s\n", preFinal)
+
+	finalSrc, _ := strconv.ParseInt(preFinal, 2, 64)
+	final := permuteBlock(uint64(finalSrc), finalReplacementPositions[:], 64)
+	buf.Reset()
+	binary.Write(buf, binary.BigEndian, final)
+
+	return buf.Bytes()
 }
 
 func permuteBlock(src uint64, permutation []uint8, size uint8) (block uint64) {
