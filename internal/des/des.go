@@ -23,8 +23,11 @@ func Encrypt(textBytes, keyBytes []byte) []byte {
 
 	binary.Write(buf, binary.BigEndian, factKey)
 	factKeyBytes := buf.Bytes()
-	factKeyBytes = append(factKeyBytes, factKeyBytes[1:]...)
-	roundKey := shortenKey(keyBytes, 6) >> 1
+	//01110100000111001111110101001001
+	//01110100000111001111110101001001
+	fmt.Printf("Биты фактич. ключа шифра : %b\n", factKeyBytes[1:])
+
+	roundKey := shortenKey(factKeyBytes, 7) >> 1
 	fmt.Printf("Биты ключа раунда        : %b\n", roundKey)
 
 	pk := permuteBlock(text, initialPermutationPositions[:], 64)
@@ -58,7 +61,6 @@ func Encrypt(textBytes, keyBytes []byte) []byte {
 	final := permuteBlock(preFinal, finalReplacementPositions[:], 64)
 	buf.Reset()
 	binary.Write(buf, binary.BigEndian, final)
-
 	return buf.Bytes()
 }
 
