@@ -2,6 +2,7 @@ package main
 
 import (
 	"github.com/Vallghall/CRYMEIN/pkg/des"
+	"github.com/Vallghall/CRYMEIN/pkg/gost"
 	"os"
 )
 
@@ -11,9 +12,11 @@ func main() {
 		os.Stderr.Write([]byte("No Args provided"))
 		os.Exit(2)
 	}
-	switch os.Args[1] {
+	switch args[1] {
 	case "DES":
 		des.DES()
+	case "GOST":
+		gost.GOST()
 	default:
 		des.DES()
 	}
