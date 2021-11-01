@@ -3,6 +3,7 @@ package main
 import (
 	"github.com/Vallghall/CRYMEIN/pkg/des"
 	"github.com/Vallghall/CRYMEIN/pkg/gost"
+	"github.com/Vallghall/CRYMEIN/pkg/rsa"
 	"os"
 )
 
@@ -17,6 +18,8 @@ func main() {
 		des.DES()
 	case "GOST":
 		gost.GOST()
+	case "RSA":
+		rsa.RSA()
 	default:
 		des.DES()
 	}

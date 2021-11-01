@@ -22,6 +22,10 @@ func rusToRSCII(word string) []byte {
 	return bb.Bytes()
 }
 
+func ToRussianIndexes(txt string) []rune {
+	return nil
+}
+
 func rsciiToRus(word string) string {
 	sb := strings.Builder{}
 	for _, sym := range strings.Split(word, " ") {
