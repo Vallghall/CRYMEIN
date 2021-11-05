@@ -2,7 +2,6 @@ package rsa
 
 import (
 	"crypto/rand"
-	"github.com/Vallghall/CRYMEIN/internal/alphabet"
 	"math/big"
 )
 
@@ -41,8 +40,8 @@ func (pk *PrivateKey) Decrypt(enc []int64) []int64 {
 	return dec
 }
 
-func (pk *PublicKey) Encrypt(txt string) (enc []int64) {
-	for _, sym := range alphabet.ToRussianIndexes(txt) {
+func (pk *PublicKey) Encrypt(txt []int64) (enc []int64) {
+	for _, sym := range txt {
 		eSym := big.NewInt(sym)
 		eSym.Exp(eSym, pk.e, nil).Mod(eSym, pk.n)
 		enc = append(enc, eSym.Int64())

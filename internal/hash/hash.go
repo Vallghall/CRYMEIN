@@ -1,15 +1,13 @@
 package hash
 
 import (
-	"github.com/Vallghall/CRYMEIN/internal/alphabet"
 	"github.com/Vallghall/CRYMEIN/internal/rsa"
 	"math/big"
 )
 
 const H0 = 8
 
-func Transform(txtStr string, primes *rsa.Primes) int64 {
-	txt := alphabet.ToRussianIndexes(txtStr)
+func Transform(txt []int64, primes *rsa.Primes) int64 {
 	n := primes.N()
 	h := big.NewInt(H0)
 	for _, m := range txt {

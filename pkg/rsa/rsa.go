@@ -21,7 +21,7 @@ func RSA() {
 	fmt.Printf("Закрытый ключ: %v\n", kp.D())
 	fmt.Printf("Открытый ключ: %v\n", kp.E())
 
-	encrypted := kp.Encrypt(txt)
+	encrypted := kp.Encrypt(alphabet.ToRussianIndexes(txt))
 	decrypted := kp.Decrypt(encrypted)
 	fmt.Printf("Зашифрованные символы: %v\n", encrypted)
 	fmt.Printf("Расшифрованные символы: %v\n", decrypted)
