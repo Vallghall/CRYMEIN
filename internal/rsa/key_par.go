@@ -42,7 +42,7 @@ func (pk *PublicKey) Encrypt(txt string) (enc []int64) {
 	return
 }
 
-func (p *primes) GenerateKeyPair() *keyPair {
+func (p *Primes) GenerateKeyPair() *keyPair {
 	p.generatePhi()
 	e := p.generatePublicKey()
 	d := new(big.Int).ModInverse(e, p.Phi())
@@ -52,7 +52,7 @@ func (p *primes) GenerateKeyPair() *keyPair {
 	}
 }
 
-func (p primes) generatePublicKey() *big.Int {
+func (p Primes) generatePublicKey() *big.Int {
 	e, _ := rand.Int(rand.Reader, p.Phi())
 	for i := new(big.Int); ; {
 		if i.GCD(nil, nil, e, p.Phi()); i.Cmp(_1) == 0 && e.Cmp(_1) != 0 {
