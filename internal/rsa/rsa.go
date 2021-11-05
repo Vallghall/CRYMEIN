@@ -2,48 +2,19 @@ package rsa
 
 import (
 	"fmt"
+	"github.com/Vallghall/CRYMEIN/internal/alphabet"
 )
 
-func Encrypt(txt []rune, p, q int64) {
-	phi := (p - 1) * (q - 1)
-	fmt.Printf("P = %v; \tQ = %v; \t\uF06A = %v;\n", p, q, phi)
+func Encrypt(txt string, primes *primes) {
+	kp := primes.GenerateKeyPair()
+	fmt.Printf("P = %v; \tQ = %v;\t\uF06A = %v;\n", primes.P(), primes.Q(), primes.Phi())
+	fmt.Printf("Закрытый ключ: %v\n", kp.PrivateKey.d)
+	fmt.Printf("Открытый ключ: %v\n", kp.PublicKey.e)
 
-	d := findPrivateKey(phi)
-	fmt.Printf("Закрытый ключ: %v\n", d)
+	encrypted := kp.PublicKey.Encrypt(txt)
+	fmt.Printf("Зашифрованные символы: %v\n", encrypted)
 
-	e := findPublicKey(d, phi)
-	fmt.Printf("Открытый ключ: %v\n", e)
-
-}
-
-func findPublicKey(d, phi int64) int64 {
-	var e int64 = 2
-	for {
-		if (d*e-1)%phi == 0 {
-			return e
-		}
-		e++
-	}
-}
-
-func findPrivateKey(phi int64) int64 {
-	var d int64 = 2
-	for {
-		if isCoPrime(d, phi) {
-			return d
-		}
-		d++
-	}
-}
-
-func isCoPrime(a, b int64) bool {
-	if a == b {
-		return a == 1
-	}
-
-	if a > b {
-		return isCoPrime(a-b, b)
-	} else {
-		return isCoPrime(a, b-a)
-	}
+	decrypted := kp.Decrypt(encrypted)
+	fmt.Printf("Расшифрованные символы: %v\n", decrypted)
+	fmt.Printf("Расшифрованная строка: %v\n", string(alphabet.ToRussianRunes(decrypted)))
 }
