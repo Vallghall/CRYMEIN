@@ -2,6 +2,7 @@ package main
 
 import (
 	"github.com/Vallghall/CRYMEIN/pkg/des"
+	"github.com/Vallghall/CRYMEIN/pkg/esign"
 	"github.com/Vallghall/CRYMEIN/pkg/gost"
 	"github.com/Vallghall/CRYMEIN/pkg/hash"
 	"github.com/Vallghall/CRYMEIN/pkg/rsa"
@@ -23,6 +24,8 @@ func main() {
 		rsa.RSA()
 	case "HASH":
 		hash.Hash()
+	case "ESIGN":
+		esign.Sign()
 	default:
 		des.DES()
 	}
