@@ -25,7 +25,7 @@ func main() {
 	case "HASH":
 		hash.Hash()
 	case "ESIGN":
-		esign.Sign()
+		esign.ESign()
 	default:
 		des.DES()
 	}

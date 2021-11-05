@@ -18,6 +18,14 @@ type PrivateKey struct {
 	n *big.Int
 }
 
+func (pk *keyPair) D() *big.Int {
+	return pk.d
+}
+
+func (pk *keyPair) E() *big.Int {
+	return pk.e
+}
+
 type keyPair struct {
 	*PublicKey
 	*PrivateKey

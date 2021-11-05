@@ -11,7 +11,18 @@ func RSA() {
 	var txt string
 	fmt.Scan(&txt)
 
-	encrypted, decrypted := rsa.RSACipher(txt)
+	primes := rsa.NewPrimesFromInput()
+	fmt.Printf("P = %v; \tQ = %v;\nn = %v; \t\uF06A = %v\n",
+		primes.P(),
+		primes.Q(),
+		primes.N(),
+		primes.Phi())
+	kp := primes.GenerateKeyPair()
+	fmt.Printf("Закрытый ключ: %v\n", kp.D())
+	fmt.Printf("Открытый ключ: %v\n", kp.E())
+
+	encrypted := kp.Encrypt(txt)
+	decrypted := kp.Decrypt(encrypted)
 	fmt.Printf("Зашифрованные символы: %v\n", encrypted)
 	fmt.Printf("Расшифрованные символы: %v\n", decrypted)
 	fmt.Printf("Расшифрованная строка: %v\n", string(alphabet.ToRussianRunes(decrypted)))
