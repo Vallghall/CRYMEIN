@@ -44,11 +44,13 @@ func NewPrimesFromInput() *Primes {
 		log.Fatalln(err)
 	}
 	n := new(big.Int).Mul(p, q)
-	return &Primes{
+	primes := &Primes{
 		p: p,
 		q: q,
 		n: n,
 	}
+	primes.generatePhi()
+	return primes
 }
 
 func getPrimeFromInput(vrbl string) (*big.Int, error) {

@@ -1,17 +1,27 @@
 package rsa
 
-import (
-	"fmt"
-)
+import "fmt"
 
-func Encrypt(txt string, primes *Primes) ([]int64, []int64) {
+func RSACipher(txt string) ([]int64, []int64) {
+	primes := NewPrimesFromInput()
+	fmt.Printf("P = %v; \tQ = %v;\nn = %v; \t\uF06A = %v\n",
+		primes.P(),
+		primes.Q(),
+		primes.N(),
+		primes.Phi())
 	kp := primes.GenerateKeyPair()
-	fmt.Printf("P = %v; \tQ = %v;\t\uF06A = %v;\n", primes.P(), primes.Q(), primes.Phi())
 	fmt.Printf("Закрытый ключ: %v\n", kp.PrivateKey.d)
 	fmt.Printf("Открытый ключ: %v\n", kp.PublicKey.e)
 
-	encrypted := kp.Encrypt(txt)
-	decrypted := kp.Decrypt(encrypted)
-
+	encrypted := Encrypt(txt, kp.PublicKey)
+	decrypted := Decrypt(encrypted, kp.PrivateKey)
 	return encrypted, decrypted
+}
+
+func Encrypt(txt string, pk *PublicKey) []int64 {
+	return pk.Encrypt(txt)
+}
+
+func Decrypt(enc []int64, pk *PrivateKey) []int64 {
+	return pk.Decrypt(enc)
 }

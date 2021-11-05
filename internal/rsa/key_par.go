@@ -43,7 +43,6 @@ func (pk *PublicKey) Encrypt(txt string) (enc []int64) {
 }
 
 func (p *Primes) GenerateKeyPair() *keyPair {
-	p.generatePhi()
 	e := p.generatePublicKey()
 	d := new(big.Int).ModInverse(e, p.Phi())
 	return &keyPair{
