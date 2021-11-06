@@ -1,6 +1,8 @@
 package stable
 
-import "strconv"
+import (
+	"strconv"
+)
 
 type sBox struct {
 	s1 *sTable

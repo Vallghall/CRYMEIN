@@ -23,10 +23,6 @@ func Encrypt(textBytes, keyBytes []byte) []byte {
 
 	binary.Write(buf, binary.BigEndian, factKey)
 	factKeyBytes := buf.Bytes()
-	//01110100000111001111110101001001
-	//01110100000111001111110101001001
-	fmt.Printf("Биты фактич. ключа шифра : %b\n", factKeyBytes[1:])
-
 	roundKey := shortenKey(factKeyBytes, 7) >> 1
 	fmt.Printf("Биты ключа раунда        : %b\n", roundKey)
 
@@ -41,7 +37,7 @@ func Encrypt(textBytes, keyBytes []byte) []byte {
 	fmt.Printf("Расширенный R: %b\n", expR)
 
 	whitener := expR ^ roundKey
-	fmt.Printf("Результат XOR: %b\n", whitener)
+	fmt.Printf("Результат XOR: %048b\n", whitener)
 
 	s := fmt.Sprintf("%b", whitener)
 	for len(s) != 48 {
