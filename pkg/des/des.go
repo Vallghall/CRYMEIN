@@ -17,5 +17,5 @@ func DES() {
 	rusText := alphabet.ToRussianBytes(plainText)
 	rusKey := alphabet.ToRussianBytes(key)
 	encrypted := des.Encrypt(rusText, rusKey)
-	fmt.Printf("%08b\n", encrypted)
+	fmt.Printf("Финальный результат: %08b\n", encrypted)
 }

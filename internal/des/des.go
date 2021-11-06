@@ -19,12 +19,12 @@ func Encrypt(textBytes, keyBytes []byte) []byte {
 	fmt.Printf("Биты заданного ключа     : %b\n", key)
 
 	factKey := shortenKey(keyBytes, 7)
-	fmt.Printf("Биты фактич. ключа шифра : %b\n", factKey)
+	fmt.Printf("56-битный ключ раунда : %b\n", factKey)
 
 	binary.Write(buf, binary.BigEndian, factKey)
 	factKeyBytes := buf.Bytes()
 	roundKey := shortenKey(factKeyBytes, 7) >> 1
-	fmt.Printf("Биты ключа раунда        : %b\n", roundKey)
+	fmt.Printf("48-битный ключ раунда        : %b\n", roundKey)
 
 	pk := permuteBlock(text, initialPermutationPositions[:], 64)
 	fmt.Printf("Биты перемешанного текста: %b\n", pk)

@@ -9,7 +9,7 @@ import (
 
 func GOST() {
 	key, _ := os.ReadFile("plaintext.txt")
-	fmt.Printf("%s\n", key)
+	fmt.Printf("Последовательность символов ключа\n%s\n", key)
 	fmt.Print("Введите текс: ")
 	var plainText string
 	fmt.Scanln(&plainText)

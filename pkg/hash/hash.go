@@ -8,7 +8,7 @@ import (
 )
 
 func Hash() {
-	fmt.Println("Введите текст для шифрования:")
+	fmt.Println("Введите текст для хеширования:")
 	var txt string
 	fmt.Scan(&txt)
 	primes := rsa.NewPrimesFromInput()

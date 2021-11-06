@@ -23,7 +23,7 @@ func Encrypt(textBytes, keyBytes []byte) []byte {
 	firstSubKey := make([]byte, 4, 4)
 	copy(firstSubKey, keyBytes)
 	X0 := binary.BigEndian.Uint32(firstSubKey)
-	fmt.Printf("Сравнение битов ключа и подключа:\n%08b\n%08b\n", keyBytes, X0)
+	fmt.Printf("Биты подключа:\n%08b\n", X0)
 	L0, R0 := binary.BigEndian.Uint32(textBytes[:4]), binary.BigEndian.Uint32(textBytes[4:])
 	fmt.Printf("Биты текста:\n%08b\nL0:\t%08b\nR0:\t%08b\n", binary.BigEndian.Uint64(textBytes), L0, R0)
 
