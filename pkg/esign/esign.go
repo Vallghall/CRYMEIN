@@ -9,6 +9,9 @@ func ESign() {
 	fmt.Println("Введите текст для шифрования:")
 	var txt string
 	fmt.Scan(&txt)
-
-	fmt.Println(esign.Sign(txt))
+	if esign.Sign(txt) {
+		fmt.Println("СОВПАДАЕТ")
+	} else {
+		fmt.Println("НЕ СОВПАДАЕТ")
+	}
 }
