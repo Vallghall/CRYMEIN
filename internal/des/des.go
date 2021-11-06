@@ -39,10 +39,7 @@ func Encrypt(textBytes, keyBytes []byte) []byte {
 	whitener := expR ^ roundKey
 	fmt.Printf("Результат XOR: %048b\n", whitener)
 
-	s := fmt.Sprintf("%b", whitener)
-	for len(s) != 48 {
-		s = "0" + s
-	}
+	s := fmt.Sprintf("%048b", whitener)
 	s = sBoxing(s)
 	fmt.Printf("Результат S-боксинга: %s\n", s)
 
