@@ -17,5 +17,5 @@ func GOST() {
 	rusText := alphabet.ToRussianBytes(plainText)
 	rusKey := alphabet.ToRussianBytes(string(key))
 	encrypted := gost.Encrypt(rusText, rusKey)
-	fmt.Printf("%08b\n", encrypted)
+	fmt.Printf("Итого получаем:\n%08b\n", encrypted)
 }

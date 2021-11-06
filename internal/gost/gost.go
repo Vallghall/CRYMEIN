@@ -19,20 +19,19 @@ var substitutionTable = [8][16]byte{
 }
 
 func Encrypt(textBytes, keyBytes []byte) []byte {
-	//БоберВасяНатачиваетЗолотойОрешек
 	bb := new(bytes.Buffer)
 	firstSubKey := make([]byte, 4, 4)
 	copy(firstSubKey, keyBytes)
 	X0 := binary.BigEndian.Uint32(firstSubKey)
 	fmt.Printf("Сравнение битов ключа и подключа:\n%08b\n%08b\n", keyBytes, X0)
 	L0, R0 := binary.BigEndian.Uint32(textBytes[:4]), binary.BigEndian.Uint32(textBytes[4:])
-	fmt.Printf("Сравнение битов текста и половин текста:\n%08b\n%08b%08b\n", binary.BigEndian.Uint64(textBytes), L0, R0)
+	fmt.Printf("Биты текста:\n%08b\nL0:\t%08b\nR0:\t%08b\n", binary.BigEndian.Uint64(textBytes), L0, R0)
 
 	transformationFuncResult := f(X0, R0)
 	fmt.Printf("Циклически сдвинутый результат S-таблицы:\n%08b\n", transformationFuncResult)
 
 	R1 := transformationFuncResult ^ L0
-	fmt.Printf("R1:\n%08b\n", R1)
+	fmt.Printf("R1:\n%032b\n", R1)
 
 	binary.Write(bb, binary.BigEndian, (uint64(R0)<<32)|uint64(R1))
 
